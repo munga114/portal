@@ -30,4 +30,6 @@ class NotesDetailView(generic.DetailView):
 
 
 def homework(request):
-    return render(request,'dashboard/homework.html')
+    homework = Homework.objects.filter(user=request.user)
+    context = {'homeworks':homework}
+    return render(request,'dashboard/homework.html',context)
