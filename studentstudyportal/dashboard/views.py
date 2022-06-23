@@ -61,7 +61,7 @@ def homework(request):
         form =HomeworkForm()
     homework = Homework.objects.filter(user=request.user)
     if len(homework) == 0:
-        homework_done ==True
+        homework_done ==True #######problem ONE
     else:
         homework_done == False
         
@@ -71,3 +71,19 @@ def homework(request):
     'form':form,
     }
     return render(request,'dashboard/homework.html',context)
+
+def update_homework(request,pk=None):
+    homework = Homework.objects.get(id=pk)
+    if homework.is_finished == True: #######problem TWO
+        homework.is_finished == False
+    else:
+        homework.is_finished == True
+    homework.save()
+    return redirect('homework')
+
+def delete_homework(request,pk=None):
+    Homework.objects.get(id=pk).delete()
+    return redirect ("homework")
+
+def youtube(request):
+    return render(request,"dashboard/youtube.html")
