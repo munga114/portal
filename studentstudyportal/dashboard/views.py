@@ -86,4 +86,6 @@ def delete_homework(request,pk=None):
     return redirect ("homework")
 
 def youtube(request):
-    return render(request,"dashboard/youtube.html")
+    form = DashboardFom()
+    context = {'form':form}
+    return render(request,"dashboard/youtube.html",context)
