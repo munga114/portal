@@ -25,5 +25,9 @@ def delete_note(request,pk=None):
     Notes.objects.get(id=pk).delete()
     return redirect ("notes")
 
-def NotesDetailView(generic.Detailview):
+class NotesDetailView(generic.DetailView):
     model = Notes
+
+
+def homework(request):
+    return render(request,'dashboard/homework.html')
