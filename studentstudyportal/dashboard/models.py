@@ -6,3 +6,7 @@ class Notes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField()
+
+    class Meta:
+        verbose_name = "notes"
+        verbose_name_plural = "notes"
