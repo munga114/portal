@@ -7,6 +7,7 @@ from . forms import *
 from django.contrib import messages
 from django.views import generic
 from youtubesearchpython import VideosSearch
+import requests
 
 # Create your views here.
 def home(request):
@@ -172,4 +173,34 @@ def delete_todo(request,pk=None):
 
 
 def books(request):
-    return render (request,"dashboard/books.html")
+    if request.method == "POST":
+        form = DashboardFom(request.POST)
+        text = request.POST['text']
+        url = "https://www.googleapis.com/books/v1/volumes?q="+text
+        r = requests.get(url)
+        answer = r.json()
+        result_list = []
+        for i in range(10):
+            result_dict = {
+                'title':answer['items'][i]['volumeInfo']['title'],
+                'subtitle':answer['items'][i]['volumeInfo'].get('subtitle'),
+                'description':answer['items'][i]['volumeInfo'].get('description'),
+                'count':answer['items'][i]['volumeInfo'].get('pageCount'),
+                'categories':answer['items'][i]['volumeInfo'].get('categories'),
+                'rating':answer['items'][i]['volumeInfo'].get('pageRating'),
+                'thumbnail':answer['items'][i]['volumeInfo'].get('imageLinks').get('thumbnail'),
+                'preview':answer['items'][i]['volumeInfo'].get('previewLinks')
+            }
+            result_list.append(result_dict)
+            context={
+                'form':form,
+                'results':result_list
+            }
+        return render(request,'dashboard/books.html')
+    else:
+        form = DashboardFom()
+    context = {'form':form}
+    return render(request,"dashboard/books.html",context)
+
+def dictionary(request):
+    return render(request,"dashboard/dictionary.html")
